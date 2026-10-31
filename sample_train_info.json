@@ -1,0 +1,65 @@
+[
+{
+    "@id": "urn:uuid:0001",
+    "@type": "odpt:TrainInformation",
+    "dc:date": "2026-10-31T08:15:00+09:00",
+    "odpt:operator": "odpt.Operator:TokyoMetro",
+    "odpt:railway": "odpt.Railway:TokyoMetro.Ginza",
+    "odpt:trainInformationText": {
+    "ja": "現在、平常どおり運転しています。",
+    "en": "Trains are operating normally."
+    }
+},
+{
+    "@id": "urn:uuid:0002",
+    "@type": "odpt:TrainInformation",
+    "dc:date": "2026-10-31T08:15:00+09:00",
+    "odpt:operator": "odpt.Operator:TokyoMetro",
+    "odpt:railway": "odpt.Railway:TokyoMetro.Marunouchi",
+    "odpt:trainInformationStatus": {
+    "ja": "遅延",
+    "en": "Delay"
+    },
+    "odpt:trainInformationText": {
+    "ja": "車両点検の影響で、ダイヤが乱れています。",
+    "en": "Trains are delayed due to a vehicle inspection."
+    }
+},
+{
+    "@id": "urn:uuid:0003",
+    "@type": "odpt:TrainInformation",
+    "dc:date": "2026-10-31T08:15:00+09:00",
+    "odpt:operator": "odpt.Operator:TokyoMetro",
+    "odpt:railway": "odpt.Railway:TokyoMetro.Hibiya",
+    "odpt:trainInformationText": {
+    "ja": "現在、平常どおり運転しています。",
+    "en": "Trains are operating normally."
+    }
+},
+{
+    "@id": "urn:uuid:0004",
+    "@type": "odpt:TrainInformation",
+    "dc:date": "2026-10-31T08:15:00+09:00",
+    "odpt:operator": "odpt.Operator:Toei",
+    "odpt:railway": "odpt.Railway:Toei.Oedo",
+    "odpt:trainInformationStatus": {
+    "ja": "運転見合わせ",
+    "en": "Suspended"
+    },
+    "odpt:trainInformationText": {
+    "ja": "信号故障のため、運転を見合わせています。",
+    "en": "Service is suspended due to a signal failure."
+    }
+},
+{
+    "@id": "urn:uuid:0005",
+    "@type": "odpt:TrainInformation",
+    "dc:date": "2026-10-31T08:15:00+09:00",
+    "odpt:operator": "odpt.Operator:Toei",
+    "odpt:railway": "odpt.Railway:Toei.Asakusa",
+    "odpt:trainInformationText": {
+    "ja": "現在、平常どおり運転しています。",
+    "en": "Trains are operating normally."
+    }
+    }
+]
