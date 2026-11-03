@@ -8,3 +8,4 @@ for item in train_info:
     if "odpt:trainInformationStatus" in item:
                 print("Delayed:", item["odpt:railway"], "-",
                     item["odpt:trainInformationText"]["en"])
+
