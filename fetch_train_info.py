@@ -21,6 +21,11 @@ try:
 
     train_info = response.json()
     print("Entries:", len(train_info))
-    print(train_info[0])
+
+    for item in train_info:
+        line_name = item["odpt:railway"].split(".")[-1]
+        texts = item["odpt:trainInformationText"]
+        status_text = texts.get("en") or texts.get("ja")
+        print(line_name + ":", status_text)
 except requests.exceptions.RequestException as e:
     print("Couldn't reach ODPT:", e)
