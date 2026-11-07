@@ -6,6 +6,7 @@ with open("sample_train_info.json") as f:
 
 for item in train_info:
     if "odpt:trainInformationStatus" in item:
-                print("Delayed:", item["odpt:railway"], "-",
-                    item["odpt:trainInformationText"]["en"])
+        line_name = item["odpt:railway"].split(".")[-1]
+        print("Delayed:", line_name, "-",
+        item["odpt:trainInformationText"]["en"])
 
