@@ -29,22 +29,23 @@ def find_delays(train_info):
     return delayed_lines
 
 
-load_dotenv()
-token = os.getenv("ODPT_TOKEN")
+if __name__ == "__main__":
+    load_dotenv()
+    token = os.getenv("ODPT_TOKEN")
 
-if token is None:
-    print("ODPT_TOKEN not found in .env")
-    sys.exit()
+    if token is None:
+        print("ODPT_TOKEN not found in .env")
+        sys.exit()
 
-try:
-    train_info = fetch_train_info(token)
-    delays = find_delays(train_info)
+    try:
+        train_info = fetch_train_info(token)
+        delays = find_delays(train_info)
 
-    if not delays:
-        print("All lines running normally.")
-    else:
-        for d in delays:
-            print("Delayed:", d["line"], "[" + d["status"] + "]", "-", d["message"])
+        if not delays:
+            print("All lines running normally.")
+        else:
+            for d in delays:
+                print("Delayed:", d["line"], "[" + d["status"] + "]", "-", d["message"])
 
-except requests.exceptions.RequestException as e:
-    print("Couldn't reach ODPT:", e)
+    except requests.exceptions.RequestException as e:
+        print("Couldn't reach ODPT:", e)
