@@ -27,5 +27,24 @@ try:
         texts = item["odpt:trainInformationText"]
         status_text = texts.get("en") or texts.get("ja")
         print(line_name + ":", status_text)
+
+    print("****************delay***************")
+    delayed_lines = []
+    for item in train_info:
+        line_name = item["odpt:railway"].split(".")[-1]
+        if "odpt:trainInformationStatus" in item:
+            train_status = item["odpt:trainInformationStatus"]
+            status_label = train_status.get("en") or train_status.get("ja")
+            texts = item["odpt:trainInformationText"]
+            status_text = texts.get("en") or texts.get("ja")
+
+            delayed_lines.append(line_name)
+
+            print("Delayed:", line_name, "[" + status_label + "]", "-", status_text)
+
+    if not delayed_lines:
+        print("All lines running normally.")
+
+
 except requests.exceptions.RequestException as e:
     print("Couldn't reach ODPT:", e)
