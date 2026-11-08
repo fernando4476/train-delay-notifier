@@ -3,48 +3,48 @@ import sys
 import requests
 from dotenv import load_dotenv
 
-load_dotenv()
+URL = "https://api.odpt.org/api/v4/odpt:TrainInformation"
 
-token = os.getenv("ODPT_TOKEN")
 
-if token is None:
-    print("ODPT_TOKEN not found in .env")
-    sys.exit()
-else:
-    print("Token loaded, length:", len(token))
+def fetch_train_info(token):
+    response = requests.get(URL, params={"acl:consumerKey": token}, timeout=10)
+    return response.json()
 
-url = "https://api.odpt.org/api/v4/odpt:TrainInformation"
 
-try:
-    response = requests.get(url, params={"acl:consumerKey": token}, timeout=10)
-    print("Status:", response.status_code)
-
-    train_info = response.json()
-    print("Entries:", len(train_info))
-
-    for item in train_info:
-        line_name = item["odpt:railway"].split(".")[-1]
-        texts = item["odpt:trainInformationText"]
-        status_text = texts.get("en") or texts.get("ja")
-        print(line_name + ":", status_text)
-
-    print("****************delay***************")
+def find_delays(train_info):
     delayed_lines = []
     for item in train_info:
-        line_name = item["odpt:railway"].split(".")[-1]
         if "odpt:trainInformationStatus" in item:
+            line_name = item["odpt:railway"].split(".")[-1]
             train_status = item["odpt:trainInformationStatus"]
             status_label = train_status.get("en") or train_status.get("ja")
             texts = item["odpt:trainInformationText"]
             status_text = texts.get("en") or texts.get("ja")
 
-            delayed_lines.append(line_name)
+            delayed_lines.append({
+                "line": line_name,
+                "status": status_label,
+                "message": status_text,
+            })
+    return delayed_lines
 
-            print("Delayed:", line_name, "[" + status_label + "]", "-", status_text)
 
-    if not delayed_lines:
+load_dotenv()
+token = os.getenv("ODPT_TOKEN")
+
+if token is None:
+    print("ODPT_TOKEN not found in .env")
+    sys.exit()
+
+try:
+    train_info = fetch_train_info(token)
+    delays = find_delays(train_info)
+
+    if not delays:
         print("All lines running normally.")
-
+    else:
+        for d in delays:
+            print("Delayed:", d["line"], "[" + d["status"] + "]", "-", d["message"])
 
 except requests.exceptions.RequestException as e:
     print("Couldn't reach ODPT:", e)
