@@ -29,28 +29,30 @@ def find_delays(train_info):
     return delayed_lines
 
 def parse_line(item):
-    parse_arr = []
-    for item in train_info:
-        line_name = item["odpt:railway"].split(".")[-1]
-        disrupted = "odpt:trainInformationStatus" in item
+    line_name = item["odpt:railway"].split(".")[-1]
+    disrupted = "odpt:trainInformationStatus" in item
 
-        if disrupted:
-            train_status = item["odpt:trainInformationStatus"]
-            status_label = train_status.get("en") or train_status.get("ja")
-        else:
-            status_label = "Normal service"
+    if disrupted:
+        train_status = item["odpt:trainInformationStatus"]
+        status_label = train_status.get("en") or train_status.get("ja")
+    else:
+        status_label = "Normal service"
 
-        texts = item["odpt:trainInformationText"]
-        status_text = texts.get("en") or texts.get("ja")
+    texts = item["odpt:trainInformationText"]
+    status_text = texts.get("en") or texts.get("ja")
 
-        parse_arr.append({
-            "line": line_name,
-            "disrupted": disrupted,
-            "status": status_label,
-            "message": status_text,
-        })
+    return {
+        "line": line_name,
+        "disrupted": disrupted,
+        "status": status_label,
+        "message": status_text,
+    }
 
-    return parse_arr
+def parse_lines(train_info):
+    lines = []
+    for entry in train_info:
+        lines.append(parse_line(entry))
+    return lines
 
 
 
@@ -65,6 +67,8 @@ if __name__ == "__main__":
 
     try:
         train_info = fetch_train_info(token)
+        all_lines = parse_lines(train_info)
+        print(len(all_lines))
         delays = find_delays(train_info)
 
         if not delays:
