@@ -28,6 +28,32 @@ def find_delays(train_info):
             })
     return delayed_lines
 
+def parse_line(item):
+    parse_arr = []
+    for item in train_info:
+        line_name = item["odpt:railway"].split(".")[-1]
+        disrupted = "odpt:trainInformationStatus" in item
+
+        if disrupted:
+            train_status = item["odpt:trainInformationStatus"]
+            status_label = train_status.get("en") or train_status.get("ja")
+        else:
+            status_label = "Normal service"
+
+        texts = item["odpt:trainInformationText"]
+        status_text = texts.get("en") or texts.get("ja")
+
+        parse_arr.append({
+            "line": line_name,
+            "disrupted": disrupted,
+            "status": status_label,
+            "message": status_text,
+        })
+
+    return parse_arr
+
+
+
 
 if __name__ == "__main__":
     load_dotenv()
