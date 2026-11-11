@@ -67,8 +67,6 @@ if __name__ == "__main__":
 
     try:
         train_info = fetch_train_info(token)
-        all_lines = parse_lines(train_info)
-        print(len(all_lines))
         delays = find_delays(train_info)
 
         if not delays:
