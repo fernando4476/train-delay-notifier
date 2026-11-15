@@ -49,10 +49,10 @@ def parse_line(item):
     }
 
 def parse_lines(train_info):
-    lines = []
+    parsed_lines = []
     for entry in train_info:
-        lines.append(parse_line(entry))
-    return lines
+        parsed_lines.append(parse_line(entry))
+    return parsed_lines
 
 
 
