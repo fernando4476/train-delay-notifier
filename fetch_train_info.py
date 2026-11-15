@@ -8,6 +8,7 @@ URL = "https://api.odpt.org/api/v4/odpt:TrainInformation"
 
 def fetch_train_info(token):
     response = requests.get(URL, params={"acl:consumerKey": token}, timeout=10)
+    response.raise_for_status()
     return response.json()
 
 
@@ -67,8 +68,6 @@ if __name__ == "__main__":
 
     try:
         train_info = fetch_train_info(token)
-        all_lines = parse_lines(train_info)
-        print(len(all_lines))
         delays = find_delays(train_info)
 
         if not delays:
