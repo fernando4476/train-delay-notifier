@@ -9,8 +9,11 @@ class DelayEvent(Base):
     __tablename__ = "delay_events"
 
     id = Column(Integer, primary_key=True)
-    # your other five columns go here
-
+    line = Column(Text)
+    status = Column(Text)
+    message = Column(Text)
+    started_at = Column(DateTime)
+    ended_at = Column(DateTime, nullable=True)
 
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
