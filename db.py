@@ -15,7 +15,7 @@ class DelayEvent(Base):
     started_at = Column(DateTime)
     ended_at = Column(DateTime, nullable=True)
 
+
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
     print("Database created")
-    
