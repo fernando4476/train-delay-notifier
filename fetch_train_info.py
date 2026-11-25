@@ -1,9 +1,18 @@
 import os
 import sys
+
 import requests
 from dotenv import load_dotenv
 
 URL = "https://api.odpt.org/api/v4/odpt:TrainInformation"
+
+STATUS_TRANSLATIONS = {
+    "遅延": "Delay",
+    "運転見合わせ": "Service suspended",
+    "ダイヤ乱れ": "Schedule disrupted",
+    "運転再開": "Service resumed",
+    "運休": "Cancelled",
+}
 
 
 def fetch_train_info(token):
@@ -12,30 +21,14 @@ def fetch_train_info(token):
     return response.json()
 
 
-def find_delays(train_info):
-    delayed_lines = []
-    for item in train_info:
-        if "odpt:trainInformationStatus" in item:
-            line_name = item["odpt:railway"].split(".")[-1]
-            train_status = item["odpt:trainInformationStatus"]
-            status_label = train_status.get("en") or train_status.get("ja")
-            texts = item["odpt:trainInformationText"]
-            status_text = texts.get("en") or texts.get("ja")
-
-            delayed_lines.append({
-                "line": line_name,
-                "status": status_label,
-                "message": status_text,
-            })
-    return delayed_lines
-
 def parse_line(item):
     line_name = item["odpt:railway"].split(".")[-1]
     disrupted = "odpt:trainInformationStatus" in item
 
     if disrupted:
         train_status = item["odpt:trainInformationStatus"]
-        status_label = train_status.get("en") or train_status.get("ja")
+        status_ja = train_status.get("ja")
+        status_label = train_status.get("en") or STATUS_TRANSLATIONS.get(status_ja, status_ja)
     else:
         status_label = "Normal service"
 
@@ -49,6 +42,7 @@ def parse_line(item):
         "message": status_text,
     }
 
+
 def parse_lines(train_info):
     parsed_lines = []
     for entry in train_info:
@@ -56,6 +50,12 @@ def parse_lines(train_info):
     return parsed_lines
 
 
+def find_delays(train_info):
+    delayed = []
+    for line in parse_lines(train_info):
+        if line["disrupted"]:
+            delayed.append(line)
+    return delayed
 
 
 if __name__ == "__main__":

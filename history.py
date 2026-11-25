@@ -1,12 +1,10 @@
-from datetime import datetime
-
+from datetime import datetime, timezone
 from sqlalchemy.orm import Session
-
 from db import engine, DelayEvent
 
 
 def record_delays(delays):
-    now = datetime.now()
+    now = datetime.now(timezone.utc)
 
     with Session(engine) as session:
         open_events = session.query(DelayEvent).filter(DelayEvent.ended_at.is_(None)).all()
@@ -37,6 +35,11 @@ def record_delays(delays):
 
         session.commit()
 
+def as_utc(dt):
+    if dt is None:
+        return None
+    return dt.replace(tzinfo=timezone.utc)
+
 def recent_events():
     with Session(engine) as session:
         rows = session.query(DelayEvent).order_by(DelayEvent.started_at.desc()).limit(20).all()
@@ -46,8 +49,8 @@ def recent_events():
                 "line": row.line,
                 "status": row.status,
                 "message": row.message,
-                "started_at": row.started_at,
-                "ended_at": row.ended_at,
+                "started_at": as_utc(row.started_at),
+                "ended_at": as_utc(row.ended_at),
                 "ongoing": row.ended_at is None,
             })
         
