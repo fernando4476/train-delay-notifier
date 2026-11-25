@@ -8,7 +8,7 @@ from fastapi import FastAPI, HTTPException
 
 from db import Base, engine
 from fetch_train_info import fetch_train_info, find_delays, parse_lines
-from history import record_delays
+from history import record_delays, recent_events
 
 load_dotenv()
 token = os.getenv("ODPT_TOKEN")
@@ -56,3 +56,7 @@ def get_lines():
     except requests.exceptions.RequestException:
         raise HTTPException(status_code=503, detail="Service Unavailable: Unable to fetch train information.")
     return lines
+
+@app.get("/history")
+def get_history():
+    return recent_events() 
