@@ -37,6 +37,10 @@ def record_delays(delays):
 
         session.commit()
 
+def recent_events():
+
+
+
 
 if __name__ == "__main__":
     fake = [{"line": "Chiyoda", "status": "Delay", "message": "Test delay"}]
