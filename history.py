@@ -39,9 +39,19 @@ def record_delays(delays):
 
 def recent_events():
     with Session(engine) as session:
-        open_events = session.query(DelayEvent).filter(DelayEvent.ended_at.is_(None)).all()
-
-
+        rows = session.query(DelayEvent).order_by(DelayEvent.started_at.desc()).limit(20).all()
+        recent_evnt = []
+        for row in rows:
+            recent_evnt.append({
+                "line": row.line,
+                "status": row.status,
+                "message": row.message,
+                "started_at": row.started_at,
+                "ended_at": row.ended_at,
+                "ongoing": row.ended_at is None,
+            })
+        
+        return recent_evnt
 
 
 if __name__ == "__main__":
