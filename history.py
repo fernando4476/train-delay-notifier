@@ -38,6 +38,8 @@ def record_delays(delays):
         session.commit()
 
 def recent_events():
+    with Session(engine) as session:
+        open_events = session.query(DelayEvent).filter(DelayEvent.ended_at.is_(None)).all()
 
 
 
